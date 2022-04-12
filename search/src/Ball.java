@@ -6,8 +6,8 @@ public class Ball extends Move{
 
 
     //初始化位置
-    private int x;
-    private int y;
+//    private int x;
+//    private int y;
     public Ball(int x,int y)
     {
         super(x,y); //从Move类中继承初始坐标
