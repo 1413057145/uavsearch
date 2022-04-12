@@ -9,7 +9,7 @@ public class UI {
     }
     private void ui() {
         JFrame jf = new JFrame();
-        jf.setSize(800,800); //分辨率
+        jf.setSize(800,900); //分辨率
         jf.setTitle("search"); //标题
         jf.setLocationRelativeTo(null); //窗⼝在中间
         jf.setDefaultCloseOperation(3); //关闭窗⼝时关闭进程
