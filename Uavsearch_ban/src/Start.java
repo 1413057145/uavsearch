@@ -64,7 +64,7 @@ public class Start extends JPanel{
         this.add(conti);//把按钮添加上去
    //     con.add(JSPane, BorderLayout.CENTER);
     //    con.add(this, BorderLayout.SOUTH);//将jp添加到容器
-        targetnum=1;
+        targetnum=0;
 
 //        add.addActionListener(new ActionListener(){//实现点一下按钮增加一个目标
 //            public void actionPerformed(ActionEvent e){
@@ -89,7 +89,7 @@ public class Start extends JPanel{
                 if(e.getSource()==start){
                     targetnum=Integer.parseInt(setT_num.getText());//获取框内数量，赋值给targetnum
                     System.out.println("将目标数量设为"+targetnum);
-                   for(int i=2;i<=targetnum;i++) {//循环生成目标
+                   for(int i=1;i<=targetnum;i++) {//循环生成目标
                      //  System.out.println("已生成目标"+i);
                        addtarget(i);
                        repaint();
@@ -118,12 +118,12 @@ public class Start extends JPanel{
             }
         });
 
-        for(int i=1;i<=targetnum;i++){
-            target[i] = new Target(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),2,2,100,100,10,this,true,false);
-        }
-        for(int i=1;i<=targetnum;i++){
-            target[i].start();
-        }
+//        for(int i=1;i<=targetnum;i++){
+//            target[i] = new Target(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),2,2,100,100,10,this,true,false);
+//        }
+//        for(int i=1;i<=targetnum;i++){
+//            target[i].start();
+//        }
     }
     public void stop(){
         for(int i=1;i<=targetnum;i++)
