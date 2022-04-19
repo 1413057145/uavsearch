@@ -12,37 +12,63 @@ public class Start extends JPanel{
     int x1,y1;
     int x2,y2;
     int size;
-    JButton jb= new JButton();
+
+    JButton add= new JButton("添加目标");
+
+    JLabel utip=new JLabel("设置无人机数量");
+    JTextField setU_num= new JTextField("1");//无人机数量输入框
+    JLabel ttip=new JLabel("设置目标数量");
+    JTextField setT_num= new JTextField("1");//目标数量输入框
+  //  JButton add = new JButton("添加目标");
+    JButton start=new JButton("开始");
     JButton stop = new JButton("暂停");
     JButton conti = new JButton("继续");
     private Random r = new Random();//实现目标颜色随机
-    Target target[]= new Target[6];
+    Target target[]= new Target[20];
+
     public Start(){//构造方法
-        JFrame frame = new JFrame();
-        frame.add(this);
-        frame.setVisible(true);
-        frame.setSize(800, 600);
-        this.setSize(800, 600);
-        this.setVisible(true);
-        this.setLayout(null);
-        frame.setLayout(null);
-        frame.setResizable(false);
-        frame.setDefaultCloseOperation(3);
-        frame.setLocationRelativeTo(null);
-        frame.setTitle("search");
+        JFrame jf = new JFrame();
+       // JTextArea canvas=new JTextArea();//创建画布
+      //  canvas.setEditable(false);
+       // canvas.setLineWrap(true);
+       // JScrollPane JSPane = new JScrollPane(canvas);
+        Container con = jf.getContentPane();//容器
+        jf.add(this);//把类添加到jf
+        jf.setVisible(true);//可见性
+        jf.setSize(800, 1000);
+        this.setSize(800, 800);
+        jf.setTitle("search");//标题
+         jf.setResizable(false);
+        jf.setLocationRelativeTo(null); //窗⼝在中间
+        jf.setDefaultCloseOperation(3); //关闭窗⼝时关闭进程
+       // this.setSize(800, 1000);
+       // this.setVisible(true);
+        //this.setLayout(null);
+        this.setLayout(new FlowLayout());//给类添加流式布局
 
-        jb.setText("添加一个目标");
-        jb.setBounds(50, 50, 120, 60);//设置按钮大小，位置
-        this.add(jb);
-        stop.setBounds(200,50,120,60);
+        jf.setResizable(false);//不能被用户调整大小
+
+        setU_num .setColumns(10);
+        setT_num .setColumns(10);
+
+      //  add.setBounds(50, 50, 120, 60);//设置按钮大小，位置
+        this.add(add);
+        this.add(utip);
+        this.add(setU_num);
+        this.add(ttip);
+        this.add(setT_num);
+      //  stop.setBounds(200,50,120,60);
+        this.add(start);
         this.add(stop);
-        conti.setBounds(350, 50, 120, 60);
-        this.add(conti);
-
+     //   conti.setBounds(350, 50, 120, 60);
+        this.add(conti);//把按钮添加上去
+   //     con.add(JSPane, BorderLayout.CENTER);
+        con.add(this, BorderLayout.SOUTH);//将jp添加到容器
         targetnum=1;
-        jb.addActionListener(new ActionListener(){//实现点一下按钮增加一个目标
+
+        add.addActionListener(new ActionListener(){//实现点一下按钮增加一个目标
             public void actionPerformed(ActionEvent e){
-                if(e.getSource()==jb){
+                if(e.getSource()==add){
                     System.out.println("添加一个目标");
                     if(targetnum<5)
                         targetnum++;
@@ -50,6 +76,24 @@ public class Start extends JPanel{
                         JOptionPane.showMessageDialog(null, "目标数量不能超过五个");
                     }
                     addtarget(targetnum);
+                    repaint();
+                }
+            }
+        });
+
+
+
+        start.addActionListener(new ActionListener(){//实现开始运动
+            public void actionPerformed(ActionEvent e){
+                if(e.getSource()==start){
+                    int targetnum=Integer.parseInt(setT_num.getText());
+                   for(int i=2;i<=targetnum;i++) {
+                       addtarget(targetnum);
+                   }
+                    for(int i=1;i<=targetnum;i++) {
+                        target[i].start();
+                        conti();
+                    }
                     repaint();
                 }
             }
@@ -71,7 +115,7 @@ public class Start extends JPanel{
             }
         });
         for(int i=1;i<=targetnum;i++){
-            target[i] = new Target(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),5,5,r.nextInt(750),r.nextInt(550),25,this,false,false);
+            target[i] = new Target(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),2,2,100,100,10,this,false,false);
         }
         for(int i=1;i<=targetnum;i++){
             target[i].start();
@@ -86,7 +130,7 @@ public class Start extends JPanel{
             target[i].setSuspend(false);//把所有目标悬挂设置为false
     }
     public void addtarget(int targetnum){
-        target[targetnum]=new Target(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),5,5,r.nextInt(750),r.nextInt(550),25,this,false,false);
+        target[targetnum]=new Target(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),2,2,100,100,10,this,false,false);
         target[targetnum].start();
     }
     public void paint(Graphics g){
