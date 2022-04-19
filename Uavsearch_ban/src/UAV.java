@@ -7,10 +7,14 @@ public class UAV extends Thread{//继承thread类，实现生成一个目标调�
     private int w;//x坐标
     private int h;//y坐标
     private int r;//目标半径
-    private Start bf;
-    private boolean suspended=false;
-    private boolean found=false;
+    private Start bf;//生成位置，哪个窗口
+    private boolean suspended=true;
     private String control = "";
+    private int num=0;//记录飞行趟数
+    private int lr_flag=1;//记录扫描方向，1往右，-1往左
+    private int ud_flag=1;//记录现在该往上还是往下扫描，1往下，-1往上
+    private int dis= Start.uavnum*20;//记录左右方向应该移动多少
+    int w_reach;//记录这次要移动到的坐标
     public UAV(Color color, int x, int y, int w, int h, int r, Start bf, boolean suspended){
         this.color=color;
         this.x=x;
@@ -35,18 +39,48 @@ public class UAV extends Thread{//继承thread类，实现生成一个目标调�
                     }
                 }
             }
-            if(w+x>=750){
-                x=-x;
+            if(w+x>=800){//到达右边界。接下来往左飞
+                lr_flag=-1;
+                x=2*lr_flag;
             }
-            if(w-x<=0){
-                x=5;
+            if(w-x<=0){//到达左边界。接下来往右飞
+                lr_flag=1;
+                x=2*lr_flag;
             }
-            if(h+y>=550){
-                y=-y;
+            if(h+y>=800){
+                num++;//每次到达下边界，趟数加一
+                ud_flag=-1;//设置无人机该往上移动了
+                 w_reach=w+lr_flag*dis;//记录这次要移动到的坐标
+                y=0;//y方向速度归零
+                x=lr_flag*2;//设置左右移动方向，用来代替下段代码
+//                if(lr_flag==1)
+//                    x=2;
+//                else x=-2;
+
             }
             if(h+y<=0){
-                y=5;
+                num++;//每次到达上边界，趟数加一
+                ud_flag=1;//设置无人机该往下移动了
+                 w_reach=w+lr_flag*dis;//记录这次要移动到的坐标
+                y=0;//y方向速度归零
+                x=lr_flag*2;//设置左右移动方向，用来代替下段代码
+//                if(lr_flag==1)
+//                    x=2;
+//                else x=-2;
+
             }
+
+            if(w>=w_reach&&lr_flag==1) {//当运动到目标距离时
+                x=0;
+                y=2*ud_flag;
+            }
+
+            if(w<=w_reach&&lr_flag==-1) {//当运动到目标距离时
+                x=0;
+                y=2*ud_flag;
+            }
+
+
             w+=x;//更新坐标
             h+=y;
             try{
@@ -54,6 +88,8 @@ public class UAV extends Thread{//继承thread类，实现生成一个目标调�
             }catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
+
             bf.repaint();
         }
     }

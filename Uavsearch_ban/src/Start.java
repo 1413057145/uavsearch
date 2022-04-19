@@ -6,7 +6,8 @@ import java.util.Random;
 
 public class Start extends JPanel{
     int targetnum;
-
+    static int uavnum=0;
+    int foundnum;
     int h1,w1;
     int h2,w2;
     int x1,y1;
@@ -25,7 +26,7 @@ public class Start extends JPanel{
     JButton conti = new JButton("继续");
     private Random r = new Random();//实现目标颜色随机
     Target target[]= new Target[21];
-
+    UAV uav[]=new UAV[21];
     public Start(){//构造方法
         JFrame jf = new JFrame();
        // JTextArea canvas=new JTextArea();//创建画布
@@ -88,11 +89,18 @@ public class Start extends JPanel{
             public void actionPerformed(ActionEvent e){
                 if(e.getSource()==start){
                     targetnum=Integer.parseInt(setT_num.getText());//获取框内数量，赋值给targetnum
-                    System.out.println("将目标数量设为"+targetnum);
+                    uavnum=Integer.parseInt(setU_num.getText());//获取框内数量，赋值给uavnum
+              //      System.out.println("将目标数量设为"+targetnum);
                    for(int i=1;i<=targetnum;i++) {//循环生成目标
                      //  System.out.println("已生成目标"+i);
                        addtarget(i);
                        repaint();
+                   }
+
+                   for(int i=1;i<=uavnum;i++) {//循环生成无人机
+                        //  System.out.println("已生成无人机"+i);
+                        adduav(i);
+                        repaint();
                    }
                     conti();
 
@@ -128,15 +136,25 @@ public class Start extends JPanel{
     public void stop(){
         for(int i=1;i<=targetnum;i++)
             target[i].issuspend(true);//把所有目标悬挂设置为true
+        for(int i = 1; i<=uavnum; i++)
+            uav[i].issuspend(true);//把所有目标悬挂设置为true
+
     }
     public void conti(){
         for(int i=1;i<=targetnum;i++)
             target[i].setSuspend(false);//把所有目标悬挂设置为false
+        for(int i=1;i<=uavnum;i++)
+            uav[i].setSuspend(false);//把所有目标悬挂设置为false
     }
     public void addtarget(int targetnum){
-        target[targetnum]=new Target(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),2,2,r.nextInt(800),r.nextInt(800),10,this,true,false);
+        target[targetnum]=new Target(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),2,2,r.nextInt(800),r.nextInt(800),5,this,true,false);
         target[targetnum].start();
        // System.out.println("已调用函数");
+    }
+    public void adduav(int uavnum){
+        uav[uavnum]=new UAV(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),0,2,20*uavnum,0,5,this,true);
+        uav[uavnum].start();
+        // System.out.println("已调用函数");
     }
     public void paint(Graphics g){
         super.paint(g);
@@ -144,9 +162,26 @@ public class Start extends JPanel{
             g.setColor(target[i].getColor());//设置颜色
             g.fillOval(target[i].getW(), target[i].getH(), target[i].getR()*2, target[i].getR()*2);//画椭圆 设定椭圆参数
         }
+        for(int i=1;i<=uavnum;i++){
+            g.setColor(uav[i].getColor());//设置颜色
+            g.fillRect(uav[i].getW(), uav[i].getH(), uav[i].getR()*2, uav[i].getR()*2);//画矩形 设定矩形参数
+        }
         impact();
     }
-    public void impact(){
+
+    public void borderjudge(){
+
+
+
+    }
+
+    public void found_judge(){
+
+
+
+    }
+
+    public void impact(){//处理目标之间的碰撞
         int t;
         double dis[][]=new double[21][21];//储存目标任意两个目标之间的距离
         double X1,X2,Y1,Y2;

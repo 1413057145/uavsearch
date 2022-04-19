@@ -9,7 +9,7 @@ public class Target extends Thread{//继承thread类，实现生成一个目标�
     private int h;//y坐标
     private int r;//目标半径
     private Start bf;
-    private boolean suspended=false;
+    private boolean suspended=true;
     private boolean found=false;
     private String control = "";
     public Target(Color color, int x, int y, int w, int h, int r, Start bf, boolean suspended,boolean found){
@@ -21,6 +21,7 @@ public class Target extends Thread{//继承thread类，实现生成一个目标�
         this.r=r;
         this.bf=bf;
         this.suspended=suspended;
+        this.found=found;
     }
 
     public void run(){
