@@ -14,7 +14,7 @@ public class UAV extends Thread{//继承thread类，实现生成一个目标调�
     private int lr_flag=1;//记录扫描方向，1往右，-1往左
     private int ud_flag=1;//记录现在该往上还是往下扫描，1往下，-1往上
     private int dis= Start.uavnum*20;//记录左右方向应该移动多少
-    int w_reach;//记录这次要移动到的坐标
+    private int w_reach;//记录这次要移动到的坐标
     public UAV(Color color, int x, int y, int w, int h, int r, Start bf, boolean suspended){
         this.color=color;
         this.x=x;
@@ -39,14 +39,14 @@ public class UAV extends Thread{//继承thread类，实现生成一个目标调�
                     }
                 }
             }
-            if(w+x>=800){//到达右边界。接下来往左飞
-                lr_flag=-1;
-                x=2*lr_flag;
-            }
-            if(w-x<=0){//到达左边界。接下来往右飞
-                lr_flag=1;
-                x=2*lr_flag;
-            }
+//            if(w+x>=800){//到达右边界。接下来往左飞
+//                lr_flag=-1;
+//                x=2*lr_flag;
+//            }
+//            if(w-x<=0){//到达左边界。接下来往右飞
+//                lr_flag=1;
+//                x=2*lr_flag;
+//            }
             if(h+y>=800){
                 num++;//每次到达下边界，趟数加一
                 ud_flag=-1;//设置无人机该往上移动了
@@ -101,6 +101,7 @@ public class UAV extends Thread{//继承thread类，实现生成一个目标调�
         }
         this.suspended = suspend;
     }
+
     public int getW() {
         return w;
     }
@@ -116,12 +117,15 @@ public class UAV extends Thread{//继承thread类，实现生成一个目标调�
     public void setH(int h) {
         this.h = h;
     }
+
     public Color getColor(){
         return color;
     }
+
     public void setColor(){
         this.color=color;
     }
+
     public int getX() {
         return x;
     }
@@ -137,16 +141,52 @@ public class UAV extends Thread{//继承thread类，实现生成一个目标调�
     public void setY(int y) {
         this.y = y;
     }
+
     public int getR(){
         return r;
     }
+
     public void setR(int r){
         this.r=r;
     }
+
     public boolean getsuspend(){
         return suspended;
     }
+
     public void issuspend(boolean suspended){
         this.suspended=suspended;
+    }
+
+    public int getLr_flag() {
+        return lr_flag;
+    }
+
+    public void setLr_flag(int lr_flag) {
+        this.lr_flag = lr_flag;
+    }
+
+    public int getUd_flag() {
+        return ud_flag;
+    }
+
+    public void setUd_flag(int ud_flag) {
+        this.ud_flag = ud_flag;
+    }
+
+    public int getDis() {
+        return dis;
+    }
+
+    public void setDis(int dis) {
+        this.dis = dis;
+    }
+
+    public int getW_reach() {
+        return w_reach;
+    }
+
+    public void setW_reach(int w_reach) {
+        this.w_reach = w_reach;
     }
 }

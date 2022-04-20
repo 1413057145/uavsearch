@@ -15,7 +15,7 @@ public class Start extends JPanel{
     int size;
 
     JButton add= new JButton("添加目标");
-
+    JPanel jp=new JPanel();
     JLabel utip=new JLabel("设置无人机数量");
     JTextField setU_num= new JTextField("1");//无人机数量输入框
     JLabel ttip=new JLabel("设置目标数量");
@@ -34,9 +34,10 @@ public class Start extends JPanel{
        // canvas.setLineWrap(true);
        // JScrollPane JSPane = new JScrollPane(canvas);
       //  Container con = jf.getContentPane();//容器
-        jf.add(this);//把类添加到jf
+        jf.add(this,BorderLayout.CENTER);//把类添加到jf
+        jf.add(jp,BorderLayout.SOUTH);//把jp添加到jf
         jf.setVisible(true);//可见性
-        jf.setSize(800, 1000);
+        jf.setSize(820, 1000);
         this.setSize(800, 800);
         jf.setTitle("search");//标题
          jf.setResizable(false);
@@ -45,7 +46,7 @@ public class Start extends JPanel{
        // this.setSize(800, 1000);
        // this.setVisible(true);
         //this.setLayout(null);
-        this.setLayout(new FlowLayout());//给类添加流式布局
+        jp.setLayout(new FlowLayout());//给类添加流式布局
 
         jf.setResizable(false);//不能被用户调整大小
 
@@ -54,15 +55,15 @@ public class Start extends JPanel{
 
       //  add.setBounds(50, 50, 120, 60);//设置按钮大小，位置
        // this.add(add);
-        this.add(utip);
-        this.add(setU_num);
-        this.add(ttip);
-        this.add(setT_num);
+        jp.add(utip);
+        jp.add(setU_num);
+        jp.add(ttip);
+        jp.add(setT_num);
       //  stop.setBounds(200,50,120,60);
-        this.add(start);
-        this.add(stop);
+        jp.add(start);
+        jp.add(stop);
      //   conti.setBounds(350, 50, 120, 60);
-        this.add(conti);//把按钮添加上去
+        jp.add(conti);//把按钮添加上去
    //     con.add(JSPane, BorderLayout.CENTER);
     //    con.add(this, BorderLayout.SOUTH);//将jp添加到容器
         targetnum=0;
@@ -167,15 +168,54 @@ public class Start extends JPanel{
             g.fillRect(uav[i].getW(), uav[i].getH(), uav[i].getR()*2, uav[i].getR()*2);//画矩形 设定矩形参数
         }
         impact();
+        borderjudge();
+        found_judge();
     }
 
     public void borderjudge(){
+        //当最右边的无人机正在往右飞，且要出界了
+        if(uavnum!=0)
+            if(uav[uavnum].getLr_flag()==1&&uav[uavnum].getW_reach()>800) {
+                for(int i=1;i<=uavnum;i++) {
+                    uav[i].setLr_flag(-1);//所有无人机调头
+                    uav[i].setX(-2);
+                }
+            }
 
+        if(uavnum!=0)
+            if(uav[1].getLr_flag()==-1&&uav[1].getW_reach()<0) {
+                for(int i=1;i<=uavnum;i++) {
+                    uav[i].setLr_flag(1);
+                    uav[i].setX(2);
+                }
+            }
 
 
     }
 
     public void found_judge(){
+        int i=1,j=1;
+        double dis[][]=new double[21][21];
+        double X1,X2,Y1,Y2;
+        for( i=1;i<=targetnum;i++){//计算任意无人机和目标之间的距离
+            for(j=1;j<=uavnum;j++){
+                X1= target[i].getW()+ target[i].getR();
+                X2= uav[j].getW()+ uav[j].getR();
+                Y1= target[i].getH()+ target[i].getR();
+                Y2= uav[j].getH()+ uav[j].getR();
+                dis[i][j]=Math.sqrt((X2-X1)*(X2-X1)+(Y2-Y1)*(Y2-Y1));//距离公式，sqrt是开方
+                if(dis[i][j]<20){
+                    target[i].setFound(true);
+                    foundnum++;
+                    target[i].setColor(new Color(238,238,238));
+                    target[i].setSuspend(true);
+                    System.out.println("目标"+i+"被找到");
+                    break;
+                }
+            }
+
+
+        }
 
 
 

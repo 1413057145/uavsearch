@@ -11,7 +11,7 @@ public class Target extends Thread{//继承thread类，实现生成一个目标�
     private Start bf;
     private boolean suspended=true;
     private boolean found=false;
-    private String control = "";
+   // private String control = "";
     public Target(Color color, int x, int y, int w, int h, int r, Start bf, boolean suspended,boolean found){
         this.color=color;
         this.x=x;
@@ -56,7 +56,8 @@ public class Target extends Thread{//继承thread类，实现生成一个目标�
             }catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            bf.repaint();
+         //   if(!found)
+          //  bf.repaint();//没被找到才画
         }
     }
     public void setSuspend(boolean suspend) {
@@ -85,7 +86,7 @@ public class Target extends Thread{//继承thread类，实现生成一个目标�
     public Color getColor(){
         return color;
     }
-    public void setColor(){
+    public void setColor(Color color){
         this.color=color;
     }
     public int getX() {
@@ -114,5 +115,11 @@ public class Target extends Thread{//继承thread类，实现生成一个目标�
     }
     public void issuspend(boolean suspended){
         this.suspended=suspended;
+    }
+    public boolean isFound() {
+        return found;
+    }
+    public void setFound(boolean found) {
+        this.found = found;
     }
 }
