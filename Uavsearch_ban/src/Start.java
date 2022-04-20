@@ -7,7 +7,7 @@ import java.util.Random;
 public class Start extends JPanel{
     int targetnum;
     static int uavnum=0;
-    int foundnum;
+    int foundnum=0;
     int h1,w1;
     int h2,w2;
     int x1,y1;
@@ -17,6 +17,9 @@ public class Start extends JPanel{
     JButton add= new JButton("添加目标");
     JPanel jp=new JPanel();
     JLabel utip=new JLabel("设置无人机数量");
+
+    JLabel count=new JLabel();
+
     JTextField setU_num= new JTextField("1");//无人机数量输入框
     JLabel ttip=new JLabel("设置目标数量");
     JTextField setT_num= new JTextField("1");//目标数量输入框
@@ -55,6 +58,7 @@ public class Start extends JPanel{
 
       //  add.setBounds(50, 50, 120, 60);//设置按钮大小，位置
        // this.add(add);
+        jp.add(count);
         jp.add(utip);
         jp.add(setU_num);
         jp.add(ttip);
@@ -84,7 +88,12 @@ public class Start extends JPanel{
 //            }
 //        });
 
-
+        new Timer(100, new ActionListener() {//用计时器刷新label
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                count.setText("已找到"+foundnum+"个目标");
+            }
+        }).start();
 
         start.addActionListener(new ActionListener(){//实现开始运动
             public void actionPerformed(ActionEvent e){
@@ -204,7 +213,7 @@ public class Start extends JPanel{
                 Y1= target[i].getH()+ target[i].getR();
                 Y2= uav[j].getH()+ uav[j].getR();
                 dis[i][j]=Math.sqrt((X2-X1)*(X2-X1)+(Y2-Y1)*(Y2-Y1));//距离公式，sqrt是开方
-                if(dis[i][j]<20){
+                if(!target[i].isFound()&&dis[i][j]<20){//没找到且距离小于20，标记该目标已被找到，并计数
                     target[i].setFound(true);
                     foundnum++;
                     target[i].setColor(new Color(238,238,238));

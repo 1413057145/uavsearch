@@ -57,7 +57,7 @@ public class Target extends Thread{//继承thread类，实现生成一个目标�
                 e.printStackTrace();
             }
          //   if(!found)
-          //  bf.repaint();//没被找到才画
+            bf.repaint();//没被找到才画
         }
     }
     public void setSuspend(boolean suspend) {
