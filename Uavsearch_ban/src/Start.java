@@ -1,12 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java. awt.event.*;
+
 import java.util.Random;
 
 public class Start extends JPanel{
-    int targetnum;
+    int targetnum=0;
     static int uavnum=0;
+    static int mod=1;
     int foundnum=0;
     int h1,w1;
     int h2,w2;
@@ -14,12 +15,15 @@ public class Start extends JPanel{
     int x2,y2;
     int size;
 
-    JButton add= new JButton("添加目标");
+  //  JButton add= new JButton("添加目标");
     JPanel jp=new JPanel();
     JLabel utip=new JLabel("设置无人机数量");
-
-    JLabel count=new JLabel();
-
+    JLabel count=new JLabel();//计数提示标签
+    JLabel choose=new JLabel("选择搜索算法:");//计数提示标签
+    JRadioButton line=new JRadioButton("直线搜索");
+    JRadioButton random=new JRadioButton("随机搜索");
+    JRadioButton optimize=new JRadioButton("优化算法搜索");//选择算法单选框
+    ButtonGroup al_group =new ButtonGroup();
     JTextField setU_num= new JTextField("1");//无人机数量输入框
     JLabel ttip=new JLabel("设置目标数量");
     JTextField setT_num= new JTextField("1");//目标数量输入框
@@ -42,6 +46,7 @@ public class Start extends JPanel{
         jf.setVisible(true);//可见性
         jf.setSize(820, 1000);
         this.setSize(800, 800);
+        jp.setPreferredSize(new Dimension(800, 90));
         jf.setTitle("search");//标题
          jf.setResizable(false);
         jf.setLocationRelativeTo(null); //窗⼝在中间
@@ -55,10 +60,17 @@ public class Start extends JPanel{
 
         setU_num .setColumns(10);
         setT_num .setColumns(10);
-
+        al_group.add(line);
+        al_group.add(random);
+        al_group.add(optimize);//单选按钮添加到按钮组
+        line.setSelected(true);
       //  add.setBounds(50, 50, 120, 60);//设置按钮大小，位置
        // this.add(add);
-        jp.add(count);
+        jp.add(choose);
+        jp.add(line);
+        jp.add(random);
+        jp.add(optimize);
+
         jp.add(utip);
         jp.add(setU_num);
         jp.add(ttip);
@@ -70,7 +82,8 @@ public class Start extends JPanel{
         jp.add(conti);//把按钮添加上去
    //     con.add(JSPane, BorderLayout.CENTER);
     //    con.add(this, BorderLayout.SOUTH);//将jp添加到容器
-        targetnum=0;
+        jp.add(count);
+
 
 //        add.addActionListener(new ActionListener(){//实现点一下按钮增加一个目标
 //            public void actionPerformed(ActionEvent e){
@@ -88,7 +101,7 @@ public class Start extends JPanel{
 //            }
 //        });
 
-        new Timer(100, new ActionListener() {//用计时器刷新label
+        new Timer(100, new ActionListener() {//用计时器刷新label以显示找到的目标数
             @Override
             public void actionPerformed(ActionEvent e) {
                 count.setText("已找到"+foundnum+"个目标");
@@ -135,7 +148,28 @@ public class Start extends JPanel{
                 }
             }
         });
-
+        line.addItemListener(new ItemListener(){//选中直线搜索
+            public void itemStateChanged(ItemEvent e){
+                if(line.isSelected()){
+                    mod=1;
+             //   System.out.println(mod);
+                }
+            }
+        });
+        random.addItemListener(new ItemListener(){//选中随机搜索
+            public void itemStateChanged(ItemEvent e){
+                if(random.isSelected()){
+                    mod=2;
+                }
+            }
+        });
+        optimize.addItemListener(new ItemListener(){//选中优化搜索
+            public void itemStateChanged(ItemEvent e){
+                if(random.isSelected()){
+                    mod=3;
+                }
+            }
+        });
 //        for(int i=1;i<=targetnum;i++){
 //            target[i] = new Target(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),2,2,100,100,10,this,true,false);
 //        }
@@ -157,12 +191,15 @@ public class Start extends JPanel{
             uav[i].setSuspend(false);//把所有目标悬挂设置为false
     }
     public void addtarget(int targetnum){
-        target[targetnum]=new Target(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),2,2,r.nextInt(800),r.nextInt(800),5,this,true,false);
+        target[targetnum]=new Target(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),2*getrandom(),2*getrandom(),r.nextInt(800),r.nextInt(800),5,this,true,false);
         target[targetnum].start();
        // System.out.println("已调用函数");
     }
     public void adduav(int uavnum){
-        uav[uavnum]=new UAV(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),0,2,20*uavnum,0,5,this,true);
+        if(mod==1)
+            uav[uavnum]=new UAV(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),0,2,20*uavnum,0,5,this,true);
+        else if(mod==2)
+            uav[uavnum]=new UAV(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),2*getrandom(),2*getrandom(),r.nextInt(800),r.nextInt(800),5,this,true);
         uav[uavnum].start();
         // System.out.println("已调用函数");
     }
@@ -222,12 +259,7 @@ public class Start extends JPanel{
                     break;
                 }
             }
-
-
         }
-
-
-
     }
 
     public void impact(){//处理目标之间的碰撞
@@ -256,5 +288,13 @@ public class Start extends JPanel{
             }
         }
     }
+    public int getrandom(){//随机生成-1或1，用来随机初速度
+        Random rand = new Random();
+        if (rand.nextBoolean())
+            return 1;
+        else
+            return -1;
+    }
+
 
 }

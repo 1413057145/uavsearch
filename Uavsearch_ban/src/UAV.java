@@ -48,8 +48,10 @@ public class UAV extends Thread{//继承thread类，实现生成一个目标调�
 //                x=2*lr_flag;
 //            }
 
-
-            linesearch();
+            if(Start.mod==1)
+                 linesearch();
+            if(Start.mod==2)
+                randomsearch();
 
             try{
                 Thread.sleep(10);//运动间隔10ms
@@ -98,6 +100,26 @@ public class UAV extends Thread{//继承thread类，实现生成一个目标调�
         w+=x;//更新坐标
         h+=y;
     }
+    public void randomsearch(){
+        if(w+x>=800){
+            x=-x;
+        }
+        if(w-x<=0){
+            x=2;
+        }
+        if(h+y>=800){
+            y=-y;
+        }
+        if(h+y<=0){
+            y=2;
+        }//目标遇到边界的运动逻辑
+        w+=x;//更新坐标
+        h+=y;
+
+
+
+    }
+
 
     public void setSuspend(boolean suspend) {
         if (!suspend) {
