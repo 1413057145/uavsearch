@@ -6,7 +6,10 @@ import java.util.Random;
 
 public class Start extends JPanel{
     int targetnum=0;
+    int targetspeed=0;
+    int uavspeed=0;
     static int uavnum=0;
+
     static int mod=1;
     int foundnum=0;
     int h1,w1;
@@ -17,16 +20,20 @@ public class Start extends JPanel{
 
   //  JButton add= new JButton("添加目标");
     JPanel jp=new JPanel();
-    JLabel utip=new JLabel("设置无人机数量");
+    JLabel uav_tip =new JLabel("设置无人机数量");
+    JLabel vutip=new JLabel("设置无人机速度");
+    JLabel target_tip =new JLabel("设置目标数量");
+    JLabel vttip=new JLabel("设置目标速度");
     JLabel count=new JLabel();//计数提示标签
     JLabel choose=new JLabel("选择搜索算法:");//计数提示标签
-    JRadioButton line=new JRadioButton("直线搜索");
+    JRadioButton line=new JRadioButton("垂线搜索");
     JRadioButton random=new JRadioButton("随机搜索");
     JRadioButton optimize=new JRadioButton("优化算法搜索");//选择算法单选框
     ButtonGroup al_group =new ButtonGroup();
     JTextField setU_num= new JTextField("1");//无人机数量输入框
-    JLabel ttip=new JLabel("设置目标数量");
+    JTextField setU_speed= new JTextField("2");//无人机速度输入框
     JTextField setT_num= new JTextField("1");//目标数量输入框
+    JTextField setT_speed= new JTextField("2");//目标速度输入框
   //  JButton add = new JButton("添加目标");
     JButton start=new JButton("开始");
     JButton stop = new JButton("暂停");
@@ -58,8 +65,10 @@ public class Start extends JPanel{
 
         jf.setResizable(false);//不能被用户调整大小
 
-        setU_num .setColumns(10);
-        setT_num .setColumns(10);
+        setU_num.setColumns(10);
+        setT_num.setColumns(10);
+        setU_speed.setColumns(10);
+        setT_speed.setColumns(10);
         al_group.add(line);
         al_group.add(random);
         al_group.add(optimize);//单选按钮添加到按钮组
@@ -71,10 +80,16 @@ public class Start extends JPanel{
         jp.add(random);
         jp.add(optimize);
 
-        jp.add(utip);
+        jp.add(uav_tip);
         jp.add(setU_num);
-        jp.add(ttip);
+        jp.add(target_tip);
         jp.add(setT_num);
+
+        jp.add(vutip);
+        jp.add(setU_speed);
+        jp.add(vttip);
+        jp.add(setT_speed);
+
       //  stop.setBounds(200,50,120,60);
         jp.add(start);
         jp.add(stop);
@@ -113,6 +128,8 @@ public class Start extends JPanel{
                 if(e.getSource()==start){
                     targetnum=Integer.parseInt(setT_num.getText());//获取框内数量，赋值给targetnum
                     uavnum=Integer.parseInt(setU_num.getText());//获取框内数量，赋值给uavnum
+                    targetspeed=Integer.parseInt(setT_speed.getText());//获取框内数量，赋值给targetnum
+                    uavspeed=Integer.parseInt(setU_speed.getText());
               //      System.out.println("将目标数量设为"+targetnum);
                    for(int i=1;i<=targetnum;i++) {//循环生成目标
                      //  System.out.println("已生成目标"+i);
@@ -191,15 +208,15 @@ public class Start extends JPanel{
             uav[i].setSuspend(false);//把所有目标悬挂设置为false
     }
     public void addtarget(int targetnum){
-        target[targetnum]=new Target(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),2*getrandom(),2*getrandom(),r.nextInt(800),r.nextInt(800),5,this,true,false);
+        target[targetnum]=new Target(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),targetspeed*getrandom(),targetspeed*getrandom(),r.nextInt(800),r.nextInt(800),5,this,true,false);
         target[targetnum].start();
        // System.out.println("已调用函数");
     }
     public void adduav(int uavnum){
         if(mod==1)
-            uav[uavnum]=new UAV(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),0,2,20*uavnum,0,5,this,true);
+            uav[uavnum]=new UAV(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),0,uavspeed,20*uavnum,0,5,this,true);
         else if(mod==2)
-            uav[uavnum]=new UAV(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),2*getrandom(),2*getrandom(),r.nextInt(800),r.nextInt(800),5,this,true);
+            uav[uavnum]=new UAV(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),uavspeed*getrandom(),uavspeed*getrandom(),r.nextInt(800),r.nextInt(800),5,this,true);
         uav[uavnum].start();
         // System.out.println("已调用函数");
     }
