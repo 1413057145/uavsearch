@@ -52,6 +52,8 @@ public class UAV extends Thread{//继承thread类，实现生成一个目标调�
                  linesearch();
             if(Start.mod==2)
                 randomsearch();
+            if(Start.mod==3)
+                linesearch();
 
             try{
                 Thread.sleep(10);//运动间隔10ms

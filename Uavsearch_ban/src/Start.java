@@ -28,7 +28,7 @@ public class Start extends JPanel{
     JLabel choose=new JLabel("选择搜索算法:");//计数提示标签
     JRadioButton line=new JRadioButton("垂线搜索");
     JRadioButton random=new JRadioButton("随机搜索");
-    JRadioButton optimize=new JRadioButton("优化算法搜索");//选择算法单选框
+    JRadioButton optimize=new JRadioButton("优化搜索算法");//选择算法单选框
     ButtonGroup al_group =new ButtonGroup();
     JTextField setU_num= new JTextField("1");//无人机数量输入框
     JTextField setU_speed= new JTextField("2");//无人机速度输入框
@@ -182,7 +182,7 @@ public class Start extends JPanel{
         });
         optimize.addItemListener(new ItemListener(){//选中优化搜索
             public void itemStateChanged(ItemEvent e){
-                if(random.isSelected()){
+                if(optimize.isSelected()){
                     mod=3;
                 }
             }
@@ -212,12 +212,15 @@ public class Start extends JPanel{
         target[targetnum].start();
        // System.out.println("已调用函数");
     }
-    public void adduav(int uavnum){
+    public void adduav(int num){
         if(mod==1)
-            uav[uavnum]=new UAV(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),0,uavspeed,20*uavnum,0,5,this,true);
+            uav[num]=new UAV(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),0,uavspeed,20*num,0,5,this,true);
         else if(mod==2)
-            uav[uavnum]=new UAV(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),uavspeed*getrandom(),uavspeed*getrandom(),r.nextInt(800),r.nextInt(800),5,this,true);
-        uav[uavnum].start();
+            uav[num]=new UAV(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),uavspeed*getrandom(),uavspeed*getrandom(),r.nextInt(800),r.nextInt(800),5,this,true);
+        else if(mod==3)
+            uav[num]=new UAV(new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)),0,uavspeed,30+800/uavnum*(num-1),0,5,this,true);
+
+        uav[num].start();
         // System.out.println("已调用函数");
     }
     public void paint(Graphics g){
